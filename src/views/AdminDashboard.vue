@@ -180,7 +180,7 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch('https://stylecart-backend.onrender.com/api/products');
         if (response.ok) {
           this.products = await response.json();
         }
@@ -194,8 +194,8 @@ export default {
     async handleSubmit() {
       const token = localStorage.getItem('token');
       const url = this.isEditing 
-        ? `http://localhost:5000/api/admin/products/${this.form.id}`
-        : 'http://localhost:5000/api/admin/products';
+        ? `https://stylecart-backend.onrender.com/api/admin/products/${this.form.id}`
+        : 'https://stylecart-backend.onrender.com/api/admin/products';
       const method = this.isEditing ? 'PUT' : 'POST';
 
       try {
@@ -225,7 +225,7 @@ export default {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await fetch(`http://localhost:5000/api/admin/products/${id}`, {
+        const response = await fetch(`https://stylecart-backend.onrender.com/api/admin/products/${id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });

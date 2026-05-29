@@ -84,7 +84,7 @@ export default {
   },
   async created() {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch('https://stylecart-backend.onrender.com/api/products');
       if (!response.ok) throw new Error("Could not retrieve store inventory data.");
       
       this.products = await response.json();

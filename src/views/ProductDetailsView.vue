@@ -53,7 +53,7 @@ export default {
       const productId = this.$route.params.id;
       
       try {
-        const response = await fetch(`http://localhost:5000/api/products`);
+        const response = await fetch(`https://stylecart-backend.onrender.com/api/products`);
         if (!response.ok) throw new Error("Database collection could not be read.");
         
         const allProducts = await response.json();
