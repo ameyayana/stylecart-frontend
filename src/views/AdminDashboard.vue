@@ -192,43 +192,47 @@ export default {
       this.searchQuery = '';
     },
     async handleSubmit() {
-      // 🎯 NOTE: Changed endpoint structure to match your backend routes exactly.
-      // Removed the /admin/ segment so it maps directly to /api/products
-      const url = this.isEditing 
-        ? `https://stylecart-backend-b3zd.onrender.com/api/products/${this.form.id}`
-        : 'https://stylecart-backend-b3zd.onrender.com/api/products';
-      
-      const method = this.isEditing ? 'PUT' : 'POST';
+  const url = this.isEditing 
+    ? `https://stylecart-backend-b3zd.onrender.com/api/products/${this.form.id}`
+    : 'https://stylecart-backend-b3zd.onrender.com/api/products';
+  
+  const method = this.isEditing ? 'PUT' : 'POST';
 
-      try {
-        const response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: this.form.name,
-            price: Number(this.form.price),
-            stock: Number(this.form.stock),
-            // Added default values for properties required by your MongoDB schema
-            category: this.form.category || 'Apparel',
-            imageName: this.form.imageName || 'skirt.jpg',
-            description: this.form.description || 'New arrivals collection piece.'
-          })
-        });
+  // Force image name based on mode
+  let finalImageName = this.form.imageName;
+  if (!this.isEditing) {
+    // If we are creating a brand new product, absolutely force new.jpg
+    finalImageName = 'new.jpg'; 
+  }
 
-        if (response.ok) {
-          alert(this.isEditing ? "Product updated successfully!" : "Product added successfully!");
-          this.resetForm();
-          await this.fetchProducts(); 
-        } else {
-          const data = await response.json();
-          alert(data.error || "Operation failed.");
-        }
-      } catch (err) {
-        alert("Network connection error.");
-      }
-    },
+  try {
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: this.form.name,
+        price: Number(this.form.price),
+        stock: Number(this.form.stock),
+        category: this.form.category || 'Apparel',
+        imageName: finalImageName, // Use our explicitly forced variable here
+        description: this.form.description || 'New arrivals collection piece.'
+      })
+    });
+
+    if (response.ok) {
+      alert(this.isEditing ? "Product updated successfully!" : "Product added successfully!");
+      this.resetForm();
+      await this.fetchProducts(); 
+    } else {
+      const data = await response.json();
+      alert(data.error || "Operation failed.");
+    }
+  } catch (err) {
+    alert("Network connection error.");
+  }
+},
     async deleteProduct(id) {
       if (!confirm("Are you sure you want to delete this product?")) return;
 
