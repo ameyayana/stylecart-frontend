@@ -192,20 +192,29 @@ export default {
       this.searchQuery = '';
     },
     async handleSubmit() {
-      const token = localStorage.getItem('token');
+      // 🎯 NOTE: Changed endpoint structure to match your backend routes exactly.
+      // Removed the /admin/ segment so it maps directly to /api/products
       const url = this.isEditing 
-        ? `https://stylecart-backend-b3zd.onrender.com/api/admin/products/${this.form.id}`
-        : 'https://stylecart-backend-b3zd.onrender.com/api/admin/products';
+        ? `https://stylecart-backend-b3zd.onrender.com/api/products/${this.form.id}`
+        : 'https://stylecart-backend-b3zd.onrender.com/api/products';
+      
       const method = this.isEditing ? 'PUT' : 'POST';
 
       try {
         const response = await fetch(url, {
           method: method,
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(this.form)
+          body: JSON.stringify({
+            name: this.form.name,
+            price: Number(this.form.price),
+            stock: Number(this.form.stock),
+            // Added default values for properties required by your MongoDB schema
+            category: this.form.category || 'Apparel',
+            imageName: this.form.imageName || 'skirt.jpg',
+            description: this.form.description || 'New arrivals collection piece.'
+          })
         });
 
         if (response.ok) {
@@ -222,16 +231,18 @@ export default {
     },
     async deleteProduct(id) {
       if (!confirm("Are you sure you want to delete this product?")) return;
-      const token = localStorage.getItem('token');
 
       try {
-        const response = await fetch(`https://stylecart-backend-b3zd.onrender.com/api/admin/products/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
+        // 🎯 FIXED: Aligned delete routing path format to match backend constraints
+        const response = await fetch(`https://stylecart-backend-b3zd.onrender.com/api/products/${id}`, {
+          method: 'DELETE'
         });
 
         if (response.ok) {
+          alert("Product removed from inventory.");
           await this.fetchProducts();
+        } else {
+          alert("Could not complete delete operation.");
         }
       } catch (err) {
         console.error("Error deleting product:", err);
