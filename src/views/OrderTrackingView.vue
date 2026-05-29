@@ -69,7 +69,7 @@ export default {
         // If either is missing, the user isn't fully authenticated
         if (!token || !user) return;
 
-        const response = await fetch('https://stylecart-backend.onrender.com/api/orders', {
+        const response = await fetch('https://stylecart-backend-b3zd.onrender.com/api/orders', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Pass the correct separate token string

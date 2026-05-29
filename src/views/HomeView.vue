@@ -49,7 +49,7 @@ export default {
   },
   async created() {
     try {
-      const response = await fetch('https://stylecart-backend.onrender.com/api/products');
+      const response = await fetch('https://stylecart-backend-b3zd.onrender.com/api/products');
       if (!response.ok) throw new Error("Could not download promotional layout items.");
       
       const liveProducts = await response.json();

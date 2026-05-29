@@ -113,7 +113,7 @@ export default {
       }
 
       try {
-        const response = await fetch('https://stylecart-backend.onrender.com/api/checkout', {
+        const response = await fetch('https://stylecart-backend-b3zd.onrender.com/api/checkout', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',

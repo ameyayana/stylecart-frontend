@@ -56,7 +56,7 @@ export default {
   methods: {
     async handleRegister() {
       try {
-          const response = await fetch('https://stylecart-backend.onrender.com/api/auth/register', {
+          const response = await fetch('https://stylecart-backend-b3zd.onrender.com/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

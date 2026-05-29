@@ -18,7 +18,7 @@
         
         <div class="stock-status">
           <span class="status-indicator available">●</span> 
-          <span>{{ product.stock || 5 }} units remaining in stock</span>
+          <span>{{ product.stock }} units remaining in stock</span>
         </div>
 
         <button @click="handleCart" class="add-to-cart-big-btn">Add To Shopping Cart</button>
@@ -50,21 +50,22 @@ export default {
   },
   methods: {
     async fetchProductDetails() {
+      this.loading = true;
       const productId = this.$route.params.id;
       
       try {
-        const response = await fetch(`https://stylecart-backend.onrender.com/api/products`);
-        if (!response.ok) throw new Error("Database collection could not be read.");
+        // 🎯 Optimized explicit single item mapping parameter endpoint
+        const response = await fetch(`https://stylecart-backend-b3zd.onrender.com/api/products/${productId}`);
+        if (!response.ok) throw new Error("Product asset does not exist inside cluster registry maps.");
         
-        const allProducts = await response.json();
-        this.product = allProducts.find(p => String(p.id) === String(productId));
+        this.product = await response.json();
       } catch (err) {
         console.error("Detail sync failed:", err.message);
+        this.product = null;
       } finally {
         this.loading = false;
       }
     },
-    // Simplified resolution using direct paths to the public folder
     resolveProductImage(imageName) {
       return imageName ? `/${imageName}` : '';
     },
@@ -115,7 +116,6 @@ export default {
   box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
 
-/* Image Pane: Standardizes the 'window' for every image */
 .image-pane {
   width: 100%;
   height: 450px; 
@@ -127,7 +127,6 @@ export default {
   overflow: hidden;
 }
 
-/* The Image: Forced to fit inside the pane without distortion */
 .main-detail-img {
   max-width: 100%;
   max-height: 100%;
